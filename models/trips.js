@@ -3,7 +3,7 @@ const { default: mongoose } = require("mongoose")
 const tripsSchema = mongoose.Schema({
     departure : String,
     arrival : String,
-    departureDate : Date,
+    date : Date,
     price : number
 })
 
