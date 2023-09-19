@@ -5,6 +5,8 @@ const Booking = require('../models/bookings')
 const Trip = require('../models/trips')
 const Cart = require('../models/cart')
 const connect = require('../models/connection')
+const { startOfDay, endOfDay } = require('date-fns')
+
 
 //fonction asynchrone pour crée une nouvelle reservation depuis un voyage dans le panier (et gérer la boucle)
 async function purcharseTrip(trip){
@@ -18,9 +20,9 @@ async function purcharseTrip(trip){
 }
 
 //utilise depart, arrivée, date des inputs pour afficher les trajets correspondants, retourne un tableau d'objets
-router.get('/',(req,res)=>{
+router.get('/c',(req,res)=>{
   date = new Date(req.body.date)
-  Trip.find({departure : req.body.departure, arrival : req.body.arrival, date })
+  Trip.findOne({departure : req.body.departure, arrival : req.body.arrival, date : { $gte: startOfDay(date), $lte: endOfDay(date) } })
   .then((trips)=>res.json({trips}))
   
 })
