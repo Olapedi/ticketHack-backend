@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const Booking = require('../models/bookings')
 const Trip = require('../models/trips')
 const Cart = require('../models/cart')
+const connect = require('../models/connection')
 
 //fonction asynchrone pour crée une nouvelle reservation depuis un voyage dans le panier (et gérer la boucle)
 async function purcharseTrip(trip){
