@@ -7,6 +7,6 @@ const cartSchema = mongoose.Schema({
     price : Number
 })
 
-const Cart = mongoose.model('carts',cartSchema)
+const Cart = mongoose.model('cart',cartSchema)
 
 module.exports = Cart
