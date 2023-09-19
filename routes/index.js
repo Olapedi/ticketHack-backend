@@ -1,14 +1,22 @@
 var express = require('express');
 var router = express.Router();
+const mongoose = require('mongoose')
+const Booking = require('../models/bookings')
+const Trip = require('../models/trips')
+const Cart = require('../models/cart')
+
 
 //utilise depart, arrivée, date des inputs pour afficher les trajets correspondants
 router.get('/',(req,res)=>{
-
+  const searchedTrips = Trip.find({departure : req.body.departure, arrival : req.body.arrival, date : req.body.date})
+  res.json({trips : searchedTrips})
 })
 
 //ajoute le trajet booké au panier puis redirige vers le panier
 router.post('/', (req,res)=>{
-
+  const bookedTrip = new Cart({
+    departure : req.body.departure
+  })
 })
 
 //route qui renvoie tous les voyages dans le panier

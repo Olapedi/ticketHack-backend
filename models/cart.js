@@ -1,8 +1,10 @@
 const { default: mongoose } = require("mongoose")
 
 const cartSchema = mongoose.Schema({
-    trip:
-})
+    departure : String,
+    arrival : String,
+    date : Date,
+    price : number})
 
 const Cart = mongoose.model('carts',cartSchema)
 
