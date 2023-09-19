@@ -4,7 +4,8 @@ const cartSchema = mongoose.Schema({
     departure : String,
     arrival : String,
     date : Date,
-    price : number})
+    price : Number
+})
 
 const Cart = mongoose.model('carts',cartSchema)
 

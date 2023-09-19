@@ -4,7 +4,7 @@ const tripsSchema = mongoose.Schema({
     departure : String,
     arrival : String,
     date : Date,
-    price : number
+    price : Number
 })
 
 const Trip = mongoose.model('trips',tripsSchema)

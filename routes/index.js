@@ -5,6 +5,7 @@ const Booking = require('../models/bookings')
 const Trip = require('../models/trips')
 const Cart = require('../models/cart')
 
+//fonction asynchrone pour crée une nouvelle reservation depuis un voyage dans le panier (et gérer la boucle)
 async function purcharseTrip(trip){
   const newBooking = new Booking({
     departure : req.body.departure,
@@ -17,7 +18,8 @@ async function purcharseTrip(trip){
 
 //utilise depart, arrivée, date des inputs pour afficher les trajets correspondants, retourne un tableau d'objets
 router.get('/',(req,res)=>{
-  Trip.find({departure : req.body.departure, arrival : req.body.arrival, date : req.body.date})
+  date = new Date(req.body.date)
+  Trip.find({departure : req.body.departure, arrival : req.body.arrival, date })
   .then((trips)=>res.json({trips}))
   
 })
