@@ -26,12 +26,27 @@ async function purcharseTrip(trip){
 router.post('/search',(req,res)=>{
   console.log('get /trip')
   const date = new Date(req.body.date)
-  
-  Trip.find({departure : req.body.departure, arrival : req.body.arrival, date : { $gte: startOfDay(date), $lte: endOfDay(date) } })
-  .then((trips)=>{
-    trips.date = format(trips.date, "HH:MM")
-    res.json({trips})
-  })
+  if(!req.body.departure || !req.body.arrival || !req.body.date){
+    res.json({result : false, error : "All fields aren't filled"})
+  }
+  else{
+    Trip.find({departure : new RegExp(req.body.departure), arrival : req.body.arrival, date : { $gte: startOfDay(date), $lte: endOfDay(date) } })
+    .lean()
+    .then((trips)=>{
+
+      if(!req.body.departure || !req.body.arrival || !req.body.date){
+        res.json({result : false, error : "All fields must be filled"})
+      }
+      else if(trips.length === 0){
+        res.json({result : false, error : "No trip found"})
+      }
+      else{
+        trips.map(e=>e.date = format(new Date(e.date), "HH:mm"))
+        res.json({result : true , trips})
+      }
+ 
+    })
+  }
 })
 
 //ajoute le trajet booké au panier puis redirige vers le panier 
