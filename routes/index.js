@@ -60,6 +60,11 @@ router.post('/toCart', (req,res)=>{
   })
 })
 
+router.get('/run', (req,res)=>{
+  Trip.find()
+  .then((data)=>res.json({data}))
+})
+
 //route qui renvoie tous les voyages dans le panier, retourne un tableau d'objets
 router.get('/cart', (req,res)=>{
   Cart.find()
@@ -76,6 +81,7 @@ router.delete('/cart', (req,res)=>{
     if(deletedTrip.deleteCount === 0){
       res.json({result : false , error : "Trip not found"})
     }
+    else(res.json({result : true}))
   })
 })
 
@@ -87,8 +93,11 @@ router.post('/cart', (req,res)=>{
       purcharseTrip(trip)
     }
   })
+
   Cart.deleteMany()
-  .then(()=>window.location.assign('./booking.html'))
+  .then(()=>{
+    window.location.assign('./booking.html')
+  })
 })
 
 //route qui renvoie l'intégralité des réservations
