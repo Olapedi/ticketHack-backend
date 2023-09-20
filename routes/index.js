@@ -23,17 +23,19 @@ async function purcharseTrip(trip){
 }
 
 //utilise depart, arrivée, date des inputs pour afficher les trajets correspondants, retourne un tableau d'objets 
-router.get('/trip',(req,res)=>{
+router.post('/search',(req,res)=>{
   console.log('get /trip')
-  const date = new Date(req.params.date)
+  const date = new Date(req.body.date)
   
   Trip.find({departure : req.body.departure, arrival : req.body.arrival, date : { $gte: startOfDay(date), $lte: endOfDay(date) } })
-  .then((trips)=>res.json({trips}))
-  
+  .then((trips)=>{
+    trips.date = format(trips.date, "HH:MM")
+    res.json({trips})
+  })
 })
 
 //ajoute le trajet booké au panier puis redirige vers le panier 
-router.post('/trip', (req,res)=>{
+router.post('/toCart', (req,res)=>{
   const date = new Date(req.body.date); 
   const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
@@ -44,7 +46,10 @@ router.post('/trip', (req,res)=>{
     price : req.body.price,
   })
   bookedTrip.save()
-  .then(()=>window.location.assign('./cart.html'))
+  .then((result)=>{
+    console.log('result',result)
+    window.location.assign('./cart.html')
+  })
 })
 
 //route qui renvoie tous les voyages dans le panier, retourne un tableau d'objets
@@ -59,9 +64,11 @@ router.delete('/cart', (req,res)=>{
   const formattedDate = format(date, "yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
   
   Cart.deleteOne({departure : req.body.departure, arrival : req.body.arrival, date : formattedDate})
-})
+  // .then((deletedTrip)=>{
+  //   if()
+  })
 
-//route qui sauvegarde les éléments dans le panier vers les réservations puis vide le panier
+//route qui sauvegarde les éléments dans le panier vers les réservations puis vide le panier et envoie vers la page des réservations
 router.post('/cart', (req,res)=>{
   Cart.find()
   .then((trips)=>{
@@ -70,6 +77,7 @@ router.post('/cart', (req,res)=>{
     }
   })
   Cart.deleteMany()
+  .then(()=>window.location.assign('./booking.html'))
 })
 
 //route qui renvoie l'intégralité des réservations
@@ -78,4 +86,4 @@ router.get('/bookings', (req,res)=>{
   .then((bookings)=>res.json({bookings}))
 })
 
-module.exports = router;
+module.exports = router
