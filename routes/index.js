@@ -10,25 +10,24 @@ const { startOfDay, endOfDay, format } = require('date-fns')
 
 //fonction asynchrone pour crée une nouvelle reservation depuis un voyage dans le panier (et gérer la boucle) 
 async function purcharseTrip(trip){
-
   const newBooking = new Booking({
     departure : trip.departure,
     arrival : trip.arrival,
-    date : formattedDate,
+    date : trip.date,
     price : trip.price,
   })
   await newBooking.save()
+  
 }
 
 //utilise depart, arrivée, date des inputs pour afficher les trajets correspondants, retourne un tableau d'objets 
 router.post('/search',(req,res)=>{
-  console.log('get /trip')
   const date = new Date(req.body.date)
   if(!req.body.departure || !req.body.arrival || !req.body.date){
     res.json({result : false, error : "All fields must be filled"})
   }
   else{
-    Trip.find({departure : new RegExp(req.body.departure), arrival : req.body.arrival, date : { $gte: startOfDay(date), $lte: endOfDay(date) } })
+    Trip.find({departure : new RegExp(req.body.departure), arrival : new RegExp(req.body.arrival), date : { $gte: startOfDay(date), $lte: endOfDay(date) } })
     .lean()
     .then((trips)=>{
 
