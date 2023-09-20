@@ -1,12 +1,13 @@
+require("dotenv").config();
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const connect = require("./models/connection");
 
-var indexRouter = require("./routes/index"); //
+var indexRouter = require("./routes/index");
 
 var app = express();
-require("dotenv").config();
 
 app.use(logger("dev"));
 app.use(express.json());
